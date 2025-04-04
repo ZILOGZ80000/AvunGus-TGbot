@@ -11,11 +11,7 @@ import os
 import random
 from pathlib import Path
 
-#список админов интересно а надо юзы или ид ??????
-#ответ: фиг знает 
-#ахахахахах
 admin_list = ["humans_i_am_not_human"]
-#ладно пусь будут юзернеймы
 
 "pattern = r'\b([xх][yу][яйиеёю]|п[иё]зд|бля)\b' # антимат "
 
@@ -105,8 +101,6 @@ async def rhhfykvguvfhvhi_command(message: Message):
         if message.text[5:].strip() == "":
             await message.reply("кажется ты тупой и не указал что хочешь отправить")
             return
-        # как можно получить 2 параметра?(текст и юзернейм)
-        # ответ: мозги мои думайтеееееееее аааааааа кажется мой мозг набирает IQ 👩‍💻👩‍💻👩‍💻 я умнею уууу 😃😃😃 мое икю уже больше 0 афигеть вот это я умный 😎😎😎 йа придумал вот как можно вытажить 2 параметра: жопа туся на туся на ладно я умный 😎😎😎
         text_to_send = message.text[4:]
         await message.reply("терь пришли юзернейм")
         @dp.message()
@@ -189,49 +183,7 @@ async def roate_command(message: Message):
         roatee = 0
 translatelang = ""
 
-""""router = Router()
 
-# Словарь языков для перевода
-LANGUAGES = {
-    "английский": "en",
-    "русский": "ru",
-    "белорусский": "be",
-    "украинский": "uk",
-    "немецкий": "de",
-    "китайский": "zh",
-    "японский": "ja"
-}
-
-@router.message(Command("translite"))
-async def translite_command(message: Message):
-    # Извлекаем текст после команды
-    text_to_translate = message.text.split(maxsplit=1)[1] if len(message.text.split()) > 1 else None
-
-    if not text_to_translate:
-        await message.reply("❗ Напиши текст для перевода после команды.\nПример: /translite Привет")
-        return
-
-    # Создаем клавиатуру
-    builder = InlineKeyboardBuilder()
-    for lang_name, lang_code in LANGUAGES.items():
-        builder.button(text=lang_name, callback_data=f"lang_{lang_code}_{text_to_translate}")
-
-    builder.adjust(2)  # 2 кнопки в ряду
-    await message.answer("Выбери язык перевода:", reply_markup=builder.as_markup())
-
-@router.callback_query(F.data.startswith("lang_"))
-async def handle_translation(callback: CallbackQuery):
-    # Разбираем данные из callback
-    _, lang_code, text_to_translate = callback.data.split("_", 2)
-
-    # Выполняем перевод
-    try:
-        translated = GoogleTranslator(source='auto', target=lang_code).translate(text_to_translate)
-        await callback.message.edit_text(f"🔤 Перевод: {translated}")
-    except Exception as e:
-        await callback.message.edit_text(f"⚠ Ошибка перевода: {str(e)}")
-
-    await callback.answer()"""
 
 router = Router()  # Создаем отдельный роутер
 
@@ -248,7 +200,7 @@ LANGUAGES = {
     "японский": "ja"
 }
 
-@dp.message(Command("translator"))  # Фильтр команды без учёта состояния
+@dp.message(Command("translator")) 
 async def translite_command(message: Message):
     text_parts = message.text.split(maxsplit=1)
 
