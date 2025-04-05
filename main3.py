@@ -1,7 +1,7 @@
 import asyncio
 from aiogram import F, Router
 from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command, CommandStart
+from aiogram.filters import Command, CommandStart 
 from aiogram.types import Message, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 import gtts
@@ -42,7 +42,7 @@ async def start_command(message: Message):
 async def startt_command(message: Message):
     await message.reply("Привет! Я твой первый бот на aiogram")
 
-@dp.message(Command("info"))
+@dp.message(Command("about"))
 async def info_command(message: Message):
     await message.reply("""
 =-=-= Информация о боте =-=-=
@@ -57,13 +57,23 @@ async def info_command(message: Message):
 язык программирования: Python
 проект использует: aiogram
 прооект имеет открытый код 
-найти его можно в канале @Sushi_Studios
+найти его можно на гитхабе: [ссылка](https://github.com/ZILOGZ80000/AvunGus-TGbot/)
 
-чтобы получить кота введи команду /cat 
-
+чтобы получить список библиотек и сервисов введи команду /about_lib 
 а пока это все :)
 """)
-
+@dp.message(Command("about_lib"))
+async def about_lib_command(message: Message):
+    message.reply("""=-=-= библиотеки и сервисы =-=-=
+asyncio #асинхронность
+aiogram #тг бот
+gtts #текст в речь (команда /say)
+deep_translator # переводчик 
+re #регулярные выражения 
+os #файлы
+random #рандомайзер
+pathlib # еще файлы"""
+    
 @dp.message(Command("cat"))
 async def cat_command(message: Message):
     await message.reply(Path('каты').read_text())
