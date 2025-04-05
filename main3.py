@@ -23,7 +23,7 @@ notmat = ""
 roatee = 0
 text_to_be_translated = ""
 
-BOT_TOKEN = "7603862674:AAHWuJpvkLaNj6gJL4SMpxsu3zBLRrYvY_I"
+BOT_TOKEN = "ААААААААааАа спасибо гитгуардиану что он сказал что я спалил токен а то у меня бота взломали"
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
@@ -142,11 +142,12 @@ async def newcat_command(message: Message):
     await message.reply("✅ Твой котик отправлен на модерацию. Спасибо!")
 
     # Редкое достижение (1% шанс)
-    if random.randint(1, 100) == 62:
+    if random.randint(0, 100) == 62:
         achievement_msg = [
             "🐱 Мяу?",
             "🎉 Ты получил редкое достижение «Мяу-удача»!",
-            "🌟 Теперь есть шанс стать админом в @Sushi_Studios!"
+            "🌟 Теперь есть шанс стать админом в @Sushi_Studios!",
+            "ℹ️ Оно выпадает если рандомное число от 0 до 100 = 62."
         ]
         for msg in achievement_msg:
             await message.reply(msg)
@@ -220,7 +221,7 @@ async def translite_command(message: Message):
     builder.adjust(2)
     await message.answer("🌍 Выбери язык перевода:", reply_markup=builder.as_markup())
 
-@router.callback_query(F.data.startswith("lang_"))
+@dp.callback_query(F.data.startswith("lang_"))
 async def handle_translation(callback: CallbackQuery):
     try:
         _, lang_code, text = callback.data.split("_", 2)
@@ -255,4 +256,5 @@ async def main():
 
 if __name__ == "__main__":
     print("amongus")
+    print("это значит бот запущен")
     asyncio.run(main())
