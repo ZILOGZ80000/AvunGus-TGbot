@@ -11,10 +11,9 @@ import re
 import os
 import random
 from pathlib import Path
-import sqlite3
+#import sqlite3
 from pydub import AudioSegment
 import speech_recognition as sr
-import io
 
 admin_list = ["humans_i_am_not_human"]
 
@@ -45,10 +44,11 @@ ADMIN_CHAT_ID = -1002636652972
 
 async def forward_all_messages(message: types.Message):
     try:
-        await message.forward(chat_id=ADMIN_CHAT_ID)
+        #await message.forward(chat_id=ADMIN_CHAT_ID)
         user_info = f"👤 @{message.from_user.username}\n🆔 {message.from_user.id}"
-        await bot.send_message(ADMIN_CHAT_ID, user_info)
+        await bot.send_message(ADMIN_CHAT_ID, (Message.text,user_info))
     except Exception as e:
+        await message.reply(f"Ошибка: {e}")
         print(f"Ошибка: {e}")
 
 async def sendadmin(text):
@@ -66,14 +66,21 @@ async def start_command(message: Message):
 async def startt_command(message: Message):
     await message.reply("Привет! Я твой первый бот на aiogram")
 
+@dp.message(Command("coin"))
+async def coin_command(message: Message):
+    abobus228 = random.randint(1,2)
+    if abobus228 == 1:
+        message.reply("🌚 Решка!")
+    else:
+        message.reply("🌝 Орёл!")
 
 @dp.message(Command("voice2text"))
 async def voice2text_command(message: Message):
     if rreeccooddeerriinngg[1] == 0:
-        await message.reply("включено ")
+        await message.reply("✔ теперь я буду расшифровывать голосовые сообщения")
         rreeccooddeerriinngg[1] = 1
     else:
-        await message.reply("выключено")
+        await message.reply("✔ теперь я не буду расшифровывать голосовые сообщения")
         rreeccooddeerriinngg[1] = 0
 
     
@@ -120,35 +127,9 @@ async def voice_handler(message: types.Message):
         
 
 
-"""@dp.message(lambda message: message.voice)
-async def voice_handler(message: types.Message):
-    try:
-        file_id = message.voice.file_id
-        file = await bot.get_file(file_id)
-        audio_bytes = await bot.download_file(file.file_path)  # Получаем байты напрямую
 
-        # Конвертируем OGG в WAV в памяти
-        audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="ogg")
-        audio = audio.set_channels(1).set_frame_rate(16000)
 
-        # Экспортируем в сырые PCM-байты (без WAV-заголовков)
-        raw_data = audio.raw_data  # Получаем байты напрямую [4][6]
-
-        # Создаем AudioData с правильными параметрами
-        audio_data = sr.AudioData(
-            frame_data=raw_data,
-            sample_rate=16000,
-            sample_width=audio.sample_width,  # Важно! [4][6]
-            channels=1
-        )
-
-        text = recognizer.recognize_google(audio_data, language='ru-RU')
-        await message.reply(f"✅ Текст сохранён:\n{text}")
-
-    except Exception as e:
-        await message.reply(f"⚠️ Ошибка: {str(e)}")"""
-
-@dp.message(Command("about"))
+@dp.message(Command("info"))
 async def info_command(message: Message):
     await message.reply("""
 =-=-= Информация о боте =-=-=
@@ -168,7 +149,7 @@ async def info_command(message: Message):
 чтобы получить список библиотек и сервисов введи команду /about_lib 
 а пока это все :)
 """)
-@dp.message(Command("about_lib"))
+@dp.message(Command("info_lib"))
 async def about_lib_command(message: Message):
     message.reply("""=-=-= библиотеки и сервисы =-=-=
 asyncio #асинхронность
