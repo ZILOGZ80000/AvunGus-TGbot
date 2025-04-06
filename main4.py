@@ -21,7 +21,7 @@ admin_list = ["humans_i_am_not_human"]
 "pattern = r'\b([xх][yу][яйиеёю]|п[иё]зд|бля)\b' # антимат "
 
 pattern = r'(?iu)(?<![а-яё])(?:x[хx][уy\u045e]?[яйиеёю]|п[иіїё]*зд|бля(?:[ьъ]?[хx]?)|сучк[а-яё])(?![а-яё])'
-
+rreeccooddeerriinngg = 0
 def git_auto_pilot():
     # Автоматическое добавление всех изменений
     os.system("git add .")
@@ -65,8 +65,15 @@ async def startt_command(message: Message):
     await message.reply("Привет! Я твой первый бот на aiogram")
 
 
-"""@dp.message(Command("voice2text"))
+@dp.message(Command("voice2text"))
 async def info_command(message: Message):
+    if rreeccooddeerriinngg == 0:
+        await message.reply("включено ")
+        rreeccooddeerriinngg = 1
+    else:
+        await message.reply("выключено")
+        rreeccooddeerriinngg = 0
+
     
 
 @dp.message(lambda message: message.voice)
@@ -98,10 +105,10 @@ async def voice_handler(message: types.Message):
     except sr.UnknownValueError as e:
         await message.reply(f"❌ Не удалось распознать речь\n ошибка{e}")
     except Exception as e:
-        await message.reply(f"⚠️ Ошибка: {str(e)}")"""
+        await message.reply(f"⚠️ Ошибка: {str(e)}")
 
 
-@dp.message(lambda message: message.voice)
+"""@dp.message(lambda message: message.voice)
 async def voice_handler(message: types.Message):
     try:
         file_id = message.voice.file_id
@@ -127,7 +134,7 @@ async def voice_handler(message: types.Message):
         await message.reply(f"✅ Текст сохранён:\n{text}")
 
     except Exception as e:
-        await message.reply(f"⚠️ Ошибка: {str(e)}")
+        await message.reply(f"⚠️ Ошибка: {str(e)}")"""
 
 @dp.message(Command("about"))
 async def info_command(message: Message):
