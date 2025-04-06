@@ -13,8 +13,8 @@ import random
 from pathlib import Path
 import sqlite3
 from pydub import AudioSegment
-
 import speech_recognition as sr
+import io
 
 admin_list = ["humans_i_am_not_human"]
 
@@ -64,36 +64,15 @@ async def start_command(message: Message):
 async def startt_command(message: Message):
     await message.reply("Привет! Я твой первый бот на aiogram")
 
-"""@dp.message(lambda message: message.voice)
-async def voice_handler(message: types.Message):
-    try:
-        # Скачивание голосового сообщения
-        file_id = message.voice.file_id
-        file = await bot.get_file(file_id)
-        await bot.download_file(file.file_path, "voice_message.ogg")
 
-        # Распознавание текста
-        recognizer = sr.Recognizer()
-        with sr.AudioFile("voice_message.ogg") as source:
-            audio_data = recognizer.record(source)
-            text = recognizer.recognize_google(audio_data, language='ru-RU')
-
-            # Сохранение в БД
-            user_id = message.from_user.id
-            cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
-            conn.commit()
-
-            await message.reply(f"✅ Текст сохранён в базу:\n{text}")
-
-    except sr.UnknownValueError:
-        await message.reply("❌ Не удалось распознать речь")
-    except Exception as e:
-        await message.reply(f"⚠️ Ошибка: {str(e)}")"""""
-
-from pydub import AudioSegment
+"""@dp.message(Command("voice2text"))
+async def info_command(message: Message):
+    
 
 @dp.message(lambda message: message.voice)
 async def voice_handler(message: types.Message):
+    if rreeccooddeerriinngg == 0:
+        return
     try:
         file_id = message.voice.file_id
         file = await bot.get_file(file_id)
@@ -118,6 +97,42 @@ async def voice_handler(message: types.Message):
 
     except sr.UnknownValueError as e:
         await message.reply(f"❌ Не удалось распознать речь\n ошибка{e}")
+    except Exception as e:
+        await message.reply(f"⚠️ Ошибка: {str(e)}")"""
+
+
+@dp.message(lambda message: message.voice)
+async def voice_handler(message: types.Message):
+    try:
+        file_id = message.voice.file_id
+        file = await bot.get_file(file_id)
+
+        # Получаем аудио как байты
+        audio_bytes = await bot.download_file(file.file_path)
+
+        # Конвертируем OGG в WAV в памяти
+        audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="ogg")
+        audio = audio.set_channels(1).set_frame_rate(16000)
+
+        # Экспортируем в WAV байты
+        wav_buffer = io.BytesIO()
+        audio.export(wav_buffer, format="wav", codec="pcm_s16le")
+        wav_data = wav_buffer.getvalue()
+
+        # Распознаем из памяти
+        recognizer = sr.Recognizer()
+        audio_data = sr.AudioData(wav_data, 16000, 2)
+        text = recognizer.recognize_google(audio_data, language='ru-RU')
+
+        # Сохраняем в БД
+        user_id = message.from_user.id
+        cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
+        conn.commit()
+
+        await message.reply(f"✅ Текст сохранён:\n{text}")
+
+    except sr.UnknownValueError:
+        await message.reply("❌ Не удалось распознать речь")
     except Exception as e:
         await message.reply(f"⚠️ Ошибка: {str(e)}")
                             
