@@ -87,7 +87,7 @@ async def voice_handler(message: types.Message):
         file = await bot.get_file(file_id)
         await bot.download_file(file.file_path, "voice_message.ogg")
 
-        # Конвертация в WAV с правильными параметрами
+        # Конвертация в WAV с правильными параметрамиdre
         audio = AudioSegment.from_file("voice_message.ogg", format="ogg")
         audio = audio.set_channels(1)  # Моно
         audio = audio.set_frame_rate(16000)  # 16 kHz
