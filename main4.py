@@ -22,7 +22,7 @@ admin_list = ["humans_i_am_not_human"]
 
 pattern = r'(?iu)(?<![а-яё])(?:x[хx][уy\u045e]?[яйиеёю]|п[иіїё]*зд|бля(?:[ьъ]?[хx]?)|сучк[а-яё])(?![а-яё])'
 
-rreeccooddeerriinngg = None
+rreeccooddeerriinngg = [None,None]
 
 def git_auto_pilot():
     # Автоматическое добавление всех изменений
@@ -69,18 +69,18 @@ async def startt_command(message: Message):
 
 @dp.message(Command("voice2text"))
 async def voice2text_command(message: Message):
-    if rreeccooddeerriinngg == 0:
+    if rreeccooddeerriinngg[1] == 0:
         await message.reply("включено ")
-        rreeccooddeerriinngg = 1
+        rreeccooddeerriinngg[1] = 1
     else:
         await message.reply("выключено")
-        rreeccooddeerriinngg = 0
+        rreeccooddeerriinngg[1] = 0
 
     
 
 @dp.message(lambda message: message.voice)
 async def voice_handler(message: types.Message):
-    if rreeccooddeerriinngg == 0:
+    if rreeccooddeerriinngg[1] == 0:
         return
     try:
         file_id = message.voice.file_id
@@ -102,10 +102,10 @@ async def voice_handler(message: types.Message):
             #cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
             #conn.commit()
 
-            await message.reply(f"✅ Текст сохранён:\n{text}")
+            await message.reply(f"✅ Текст расшифрован:\n{text}")
 
     except sr.UnknownValueError as e:
-        await message.reply(f"❌ Не удалось распознать речь\n ошибка{e}")
+        await message.reply(f"❌ Не удалось распознать речь\n ошибка {e}")
     except Exception as e:
         await message.reply(f"⚠️ Ошибка: {str(e)}")
 
