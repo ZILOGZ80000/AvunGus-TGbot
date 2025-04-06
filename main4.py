@@ -12,9 +12,9 @@ import os
 import random
 from pathlib import Path
 import sqlite3
+from pydub import AudioSegment
+
 import speech_recognition as sr
-
-
 
 admin_list = ["humans_i_am_not_human"]
 
@@ -64,7 +64,7 @@ async def start_command(message: Message):
 async def startt_command(message: Message):
     await message.reply("Привет! Я твой первый бот на aiogram")
 
-@dp.message(lambda message: message.voice)
+"""@dp.message(lambda message: message.voice)
 async def voice_handler(message: types.Message):
     try:
         # Скачивание голосового сообщения
@@ -84,6 +84,37 @@ async def voice_handler(message: types.Message):
             conn.commit()
 
             await message.reply(f"✅ Текст сохранён в базу:\n{text}")
+
+    except sr.UnknownValueError:
+        await message.reply("❌ Не удалось распознать речь")
+    except Exception as e:
+        await message.reply(f"⚠️ Ошибка: {str(e)}")"""""
+
+from pydub import AudioSegment
+
+@dp.message(lambda message: message.voice)
+async def voice_handler(message: types.Message):
+    try:
+        file_id = message.voice.file_id
+        file = await bot.get_file(file_id)
+        await bot.download_file(file.file_path, "voice_message.ogg")
+
+        # Конвертация в WAV с правильными параметрами
+        audio = AudioSegment.from_file("voice_message.ogg", format="ogg")
+        audio = audio.set_channels(1)  # Моно
+        audio = audio.set_frame_rate(16000)  # 16 kHz
+        audio.export("converted.wav", format="wav", parameters=["-acodec", "pcm_s16le"])
+
+        recognizer = sr.Recognizer()
+        with sr.AudioFile("converted.wav") as source:
+            audio_data = recognizer.record(source)
+            text = recognizer.recognize_google(audio_data, language='ru-RU')
+
+            user_id = message.from_user.id
+            cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
+            conn.commit()
+
+            await message.reply(f"✅ Текст сохранён:\n{text}")
 
     except sr.UnknownValueError:
         await message.reply("❌ Не удалось распознать речь")
