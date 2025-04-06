@@ -116,8 +116,8 @@ async def voice_handler(message: types.Message):
 
             await message.reply(f"✅ Текст сохранён:\n{text}")
 
-    except sr.UnknownValueError:
-        await message.reply("❌ Не удалось распознать речь")
+    except sr.UnknownValueError as e:
+        await message.reply("❌ Не удалось распознать речь\n{e}")
     except Exception as e:
         await message.reply(f"⚠️ Ошибка: {str(e)}")
                             
