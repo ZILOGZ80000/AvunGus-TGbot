@@ -111,8 +111,8 @@ async def voice_handler(message: types.Message):
             text = recognizer.recognize_google(audio_data, language='ru-RU')
 
             user_id = message.from_user.id
-            cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
-            conn.commit()
+            #cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
+            #conn.commit()
 
             await message.reply(f"✅ Текст сохранён:\n{text}")
 
