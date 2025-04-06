@@ -37,7 +37,7 @@ roatee = 0
 text_to_be_translated = ""
 
 #BOT_TOKEN = "ААААААААааАа спасибо гитгуардиану что он сказал что я спалил токен а то у меня бота взломали"
-BOT_TOKEN = "7603862674:AAHbbZEsMdG96QTsQ9yA92vHOtqIWR6C4wU"
+BOT_TOKEN = "7603862674:AAHUK-KqmSNafJUfpdRsU1SDpXHZdK0AHpQ"
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
