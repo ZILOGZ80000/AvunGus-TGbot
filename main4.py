@@ -106,36 +106,28 @@ async def voice_handler(message: types.Message):
     try:
         file_id = message.voice.file_id
         file = await bot.get_file(file_id)
-
-        # Получаем аудио как байты
-        audio_bytes = await bot.download_file(file.file_path)
+        audio_bytes = await bot.download_file(file.file_path)  # Получаем байты напрямую
 
         # Конвертируем OGG в WAV в памяти
         audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="ogg")
         audio = audio.set_channels(1).set_frame_rate(16000)
 
-        # Экспортируем в WAV байты
-        wav_buffer = io.BytesIO()
-        audio.export(wav_buffer, format="wav", codec="pcm_s16le")
-        wav_data = wav_buffer.getvalue()
+        # Экспортируем в сырые PCM-байты (без WAV-заголовков)
+        raw_data = audio.raw_data  # Получаем байты напрямую [4][6]
 
-        # Распознаем из памяти
-        recognizer = sr.Recognizer()
-        audio_data = sr.AudioData(wav_data, 16000, 2)
+        # Создаем AudioData с правильными параметрами
+        audio_data = sr.AudioData(
+            frame_data=raw_data,
+            sample_rate=16000,
+            sample_width=audio.sample_width,  # Важно! [4][6]
+            channels=1
+        )
+
         text = recognizer.recognize_google(audio_data, language='ru-RU')
-
-        # Сохраняем в БД
-        user_id = message.from_user.id
-        cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
-        conn.commit()
-
         await message.reply(f"✅ Текст сохранён:\n{text}")
 
-    except sr.UnknownValueError:
-        await message.reply("❌ Не удалось распознать речь")
     except Exception as e:
         await message.reply(f"⚠️ Ошибка: {str(e)}")
-                            
 
 @dp.message(Command("about"))
 async def info_command(message: Message):
