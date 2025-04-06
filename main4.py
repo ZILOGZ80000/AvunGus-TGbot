@@ -2,8 +2,9 @@ import asyncio
 from aiogram import F, Router
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command, CommandStart 
-from aiogram.types import Message, CallbackQuery, ChatType
+from aiogram.types import Message, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.enums import ChatType
 import gtts
 from deep_translator import GoogleTranslator
 import re
@@ -19,7 +20,15 @@ admin_list = ["humans_i_am_not_human"]
 
 pattern = r'(?iu)(?<![а-яё])(?:x[хx][уy\u045e]?[яйиеёю]|п[иіїё]*зд|бля(?:[ьъ]?[хx]?)|сучк[а-яё])(?![а-яё])'
 
+def git_auto_pilot():
+    # Автоматическое добавление всех изменений
+    os.system("git add .")
 
+    # Выполнение коммита
+    os.system(f'git commit -m "авто обновление бота"')
+
+    # Автопуш в текущую ветку
+    os.system("git push origin HEAD")
 
 notmat = ""
 roatee = 0
@@ -281,4 +290,5 @@ async def main():
 if __name__ == "__main__":
     print("amongus")
     print("это значит бот запущен")
+    git_auto_pilot()
     asyncio.run(main())
