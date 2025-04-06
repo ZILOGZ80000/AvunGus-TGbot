@@ -94,7 +94,7 @@ async def voice_handler(message: types.Message):
         audio.export(f"converted для {message.from_user.username}.wav", format="wav", parameters=["-acodec", "pcm_s16le"])
 
         recognizer = sr.Recognizer()
-        with sr.AudioFile("converted для {message.from_user.username}.wav") as source:
+        with sr.AudioFile(f"converted для {message.from_user.username}.wav") as source:
             audio_data = recognizer.record(source)
             text = recognizer.recognize_google(audio_data, language='ru-RU')
 
