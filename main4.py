@@ -1,5 +1,5 @@
 import asyncio
-from aiogram import F, Router
+from aiogram import F
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command, CommandStart 
 from aiogram.types import Message, CallbackQuery
@@ -11,6 +11,8 @@ import re
 import os
 import random
 from pathlib import Path
+import sqlite3
+import speech_recognition as sr
 
 
 
@@ -23,10 +25,8 @@ pattern = r'(?iu)(?<![а-яё])(?:x[хx][уy\u045e]?[яйиеёю]|п[иіїё]*
 def git_auto_pilot():
     # Автоматическое добавление всех изменений
     os.system("git add .")
-
     # Выполнение коммита
     os.system(f'git commit -m "авто обновление бота"')
-
     # Автопуш в текущую ветку
     os.system("git push origin HEAD")
 
@@ -63,6 +63,33 @@ async def start_command(message: Message):
 @dp.message(Command("startt"))
 async def startt_command(message: Message):
     await message.reply("Привет! Я твой первый бот на aiogram")
+
+@dp.message(lambda message: message.voice)
+async def voice_handler(message: types.Message):
+    try:
+        # Скачивание голосового сообщения
+        file_id = message.voice.file_id
+        file = await bot.get_file(file_id)
+        await bot.download_file(file.file_path, "voice_message.ogg")
+
+        # Распознавание текста
+        recognizer = sr.Recognizer()
+        with sr.AudioFile("voice_message.ogg") as source:
+            audio_data = recognizer.record(source)
+            text = recognizer.recognize_google(audio_data, language='ru-RU')
+
+            # Сохранение в БД
+            user_id = message.from_user.id
+            cursor.execute("INSERT INTO messages VALUES (?, ?)", (user_id, text))
+            conn.commit()
+
+            await message.reply(f"✅ Текст сохранён в базу:\n{text}")
+
+    except sr.UnknownValueError:
+        await message.reply("❌ Не удалось распознать речь")
+    except Exception as e:
+        await message.reply(f"⚠️ Ошибка: {str(e)}")
+                            
 
 @dp.message(Command("about"))
 async def info_command(message: Message):
