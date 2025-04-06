@@ -66,7 +66,7 @@ async def startt_command(message: Message):
 
 
 @dp.message(Command("voice2text"))
-async def info_command(message: Message):
+async def voice2text_command(message: Message):
     if rreeccooddeerriinngg == 0:
         await message.reply("включено ")
         rreeccooddeerriinngg = 1
