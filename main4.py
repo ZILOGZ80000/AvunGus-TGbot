@@ -85,13 +85,13 @@ async def voice_handler(message: types.Message):
     try:
         file_id = message.voice.file_id
         file = await bot.get_file(file_id)
-        await bot.download_file(file.file_path, "voice_message.ogg")
+        await bot.download_file(file.file_path, f"voice_message для {message.from_user.username}.ogg")
 
         # Конвертация в WAV с правильными параметрамиdre
         audio = AudioSegment.from_file("voice_message.ogg", format="ogg")
         audio = audio.set_channels(1)  # Моно
         audio = audio.set_frame_rate(16000)  # 16 kHz
-        audio.export("converted.wav", format="wav", parameters=["-acodec", "pcm_s16le"])
+        audio.export(f"converted для {message.from_user.username}.wav", format="wav", parameters=["-acodec", "pcm_s16le"])
 
         recognizer = sr.Recognizer()
         with sr.AudioFile("converted.wav") as source:
@@ -106,8 +106,18 @@ async def voice_handler(message: types.Message):
 
     except sr.UnknownValueError as e:
         await message.reply(f"❌ Не удалось распознать речь\n ошибка {e}")
+        if e == "":
+            await message.reply("кажется это значит аудио пустое")
     except Exception as e:
-        await message.reply(f"⚠️ Ошибка: {str(e)}")
+        await message.reply(f"⚠️ Ошибка: {str(e)}\n напиши разрабом: /bug")
+    try:
+        os.remove(f"voice_message для {message.from_user.username}.ogg")
+        os.remove(f"converted для {message.from_user.username}.wav")
+    except Exception as e:
+        await message.reply(f"⚠️ Произошла ошиибка: {e}\n напиши разрабом: /bug")
+
+    
+        
 
 
 """@dp.message(lambda message: message.voice)
