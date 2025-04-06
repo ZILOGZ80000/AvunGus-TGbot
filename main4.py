@@ -21,7 +21,9 @@ admin_list = ["humans_i_am_not_human"]
 "pattern = r'\b([xх][yу][яйиеёю]|п[иё]зд|бля)\b' # антимат "
 
 pattern = r'(?iu)(?<![а-яё])(?:x[хx][уy\u045e]?[яйиеёю]|п[иіїё]*зд|бля(?:[ьъ]?[хx]?)|сучк[а-яё])(?![а-яё])'
-rreeccooddeerriinngg = 0
+
+rreeccooddeerriinngg = None
+
 def git_auto_pilot():
     # Автоматическое добавление всех изменений
     os.system("git add .")
