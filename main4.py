@@ -21,15 +21,8 @@ admin_list = ["humans_i_am_not_human"]
 
 pattern = r'(?iu)(?<![а-яё])(?:x[хx][уy\u045e]?[яйиеёю]|п[иіїё]*зд|бля(?:[ьъ]?[хx]?)|сучк[а-яё])(?![а-яё])'
 
-rreeccooddeerriinngg = [None,None]
+rreeccooddeerriinngg = [0]
 
-def git_auto_pilot():
-    # Автоматическое добавление всех изменений
-    os.system("git add .")
-    # Выполнение коммита
-    os.system(f'git commit -m "авто обновление бота"')
-    # Автопуш в текущую ветку
-    os.system("git push origin HEAD")
 
 notmat = ""
 roatee = 0
@@ -355,5 +348,5 @@ async def main():
 if __name__ == "__main__":
     print("amongus")
     print("это значит бот запущен")
-    git_auto_pilot()
+    #git_auto_pilot()
     asyncio.run(main())
