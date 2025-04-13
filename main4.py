@@ -11,7 +11,6 @@ import re
 import os
 import random
 from pathlib import Path
-#import sqlite3
 from pydub import AudioSegment
 import speech_recognition as sr
 
