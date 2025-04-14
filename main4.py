@@ -128,8 +128,6 @@ async def info_command(message: Message):
 версия бота: 0.4
 
 историю версий бота введи команду /versions
-автор: @Sushi_Studios
-
 нашёл баг/ляп? напиши команду /bug
 
 язык программирования: Python
